@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+.DS_Store
+# raw Kaggle data is large - download it yourself (see data/README.md)
+data/*.csv
+results/*.png
