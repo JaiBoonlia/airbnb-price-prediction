@@ -1,32 +1,34 @@
-# Airbnb Price Prediction
+# Airbnb Listing Price Prediction
 
-A reproducible machine-learning project that predicts Airbnb listing price from the supplied Airbnb dataset.
+This project trains regression models to estimate Airbnb listing prices from listing details, location, amenities, and text. It compares Ridge regression, Random Forest, and XGBoost.
 
 ## Dataset
 
-The project uses `data/Airbnb_Data.csv.gz` directly. It contains 74,111 listings from six cities: NYC, LA, SF, DC, Chicago and Boston.
+The project includes `data/Airbnb_Data.csv.gz`, containing 74,111 listings across New York City, Los Angeles, San Francisco, Washington, D.C., Chicago, and Boston. The target is the dataset’s existing `log_price` column. Metrics therefore describe prediction error in log-price units; they are not dollar errors.
 
-The dataset already provides `log_price`, so the experiment predicts `log_price` directly.
+## Workflow
 
-## Pipeline
+1. Load the supplied compressed CSV and remove rows with an invalid target.
+2. Make a reproducible 80/20 train/test split, stratified by city (seed 42).
+3. Fit preprocessing on the training partition only: median imputation and scaling for numeric fields, one-hot encoding for categorical fields, and TF-IDF features for amenities and listing text.
+4. Train the requested regression model or models.
+5. Evaluate on the held-out test set with MAE, RMSE, and R².
 
-1. Load and clean the supplied CSV.
-2. Remove rows with missing target values.
-3. Split the data into 80% training and 20% testing with city-stratified sampling.
-4. Fit all preprocessing on the training split only.
-5. Use numeric listing/review/location variables, categorical listing variables, amenities and TF-IDF text features.
-6. Compare Ridge regression, Random Forest and XGBoost.
-7. Report MAE, RMSE and R² on the held-out test set.
+## Results
 
-## Reproducibility
+The checked-in result files currently contain a Ridge regression run:
+
+| Model | MAE (log price) | RMSE (log price) | R² | Runtime (s) |
+|---|---:|---:|---:|---:|
+| Ridge | 0.2857 | 0.3967 | 0.6992 | 4.21 |
+
+The run used 59,288 training rows and 14,823 test rows. These figures are from the saved `results/model_comparison.csv`; they are not a comparison against Random Forest or XGBoost. Results can vary with library versions or changes to the data and configuration.
+
+## Setup and usage
+
+Use Python 3.9 or newer, then install the dependencies:
 
 ```bash
-pip install -r requirements.txt
-python run_experiments.py
-```
-
-Results are generated in `results/model_comparison.csv`.
-
-## Important
-
-The numerical results in this repository are generated from the supplied dataset by `run_experiments.py`. All reported metrics are generated directly from the supplied dataset.
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+python -m pip install -r requirements.txt
