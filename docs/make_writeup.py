@@ -24,7 +24,7 @@ def build():
     story = [P("Airbnb Price Prediction", ss["Title"]), P("Dataset-driven regression experiment", small), Spacer(1, 5)]
     story += [P("1. Objective", head), P("Predict the supplied dataset's log-transformed Airbnb listing price from listing characteristics, location, reviews, amenities and textual information." )]
     story += [P("2. Dataset", head), P("The experiment uses 74,111 listings from NYC, LA, SF, DC, Chicago and Boston. The target is the dataset's existing <b>log_price</b> field. The data are split 80:20 using city-stratified sampling." )]
-    story += [P("3. Method", head), P("Numeric variables are median-imputed and standardized. Categorical variables are one-hot encoded. Amenities and listing text are represented with TF-IDF. All preprocessing is fitted only on the training partition to prevent test leakage. Ridge regression, Random Forest and XGBoost are evaluated on the held-out test set." )]
+    story += [P("3. Method", head), P("Numeric variables are median-imputed and standardized. Categorical variables are one-hot encoded. Amenities and listing text are represented with TF-IDF. All preprocessing is fitted only on the training partition to prevent test leakage. The checked-in baseline evaluates Ridge regression on the held-out test set. Random Forest and XGBoost are optional models that can be run separately." )]
     story += [P("4. Results", head)]
     if results.empty:
         story += [P("Run <font face='Courier'>python run_experiments.py</font> to generate the numerical results.")]
@@ -35,7 +35,7 @@ def build():
         t = Table(rows, colWidths=[35*mm, 30*mm, 30*mm, 25*mm, 30*mm])
         t.setStyle(TableStyle([("GRID", (0,0),(-1,-1),0.4,colors.grey), ("BACKGROUND",(0,0),(-1,0),colors.lightgrey), ("FONTNAME",(0,0),(-1,0),"Helvetica-Bold"), ("ALIGN",(1,1),(-1,-1),"CENTER")]))
         story += [t]
-    story += [P("5. Conclusion", head), P("The reported metrics are produced directly from the supplied dataset and the code in this repository.", small)]
+    story += [P("5. Conclusion", head), P("The recorded Ridge metrics are produced from the supplied dataset and the code in this repository; optional model results should only be reported after those experiments are run.", small)]
     doc.build(story)
 
 if __name__ == "__main__":
