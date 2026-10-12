@@ -1,0 +1,2 @@
+model,mae_log_price,rmse_log_price,r2,seconds
+ridge,0.2857257297455095,0.3967150153854643,0.6992031255124143,4.21
