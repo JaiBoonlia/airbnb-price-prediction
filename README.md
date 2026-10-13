@@ -1,39 +1,35 @@
 # Airbnb Price Prediction
 
-## Project Overview
+## Overview
 
-This project uses machine learning to predict Airbnb listing prices using listing characteristics and location information from six major US cities: New York City, Los Angeles, San Francisco, Washington, D.C., Chicago, and Boston.
-
-The project explores the dataset, prepares features, trains regression models, and compares their predictive performance to identify a suitable model for price prediction.
+This project applies machine learning to estimate Airbnb listing prices using listing characteristics, location information, amenities, and text features. The dataset contains 74,111 listings across six US cities.
 
 ## Problem Statement
 
-Airbnb prices vary according to factors such as room type, property characteristics, and city. The goal of this project is to identify patterns in listing prices and build machine learning models that can estimate prices from the available listing features.
+Airbnb prices vary according to property characteristics, room type, location, and other listing attributes. This project explores these patterns and compares regression models to estimate listing prices.
 
 ## Dataset
 
 - **File:** `data/Airbnb_Data.csv.gz`
-- **Number of records:** 74,111
-- **Target variable:** `log_price`
-- **Locations:** Six US cities
+- **Records:** 74,111
+- **Target:** `log_price`
+- **Locations:** New York City, Los Angeles, San Francisco, Washington, D.C., Chicago, and Boston
 
-The dataset contains listing information used for exploratory data analysis, feature engineering, and regression modelling.
+See `data/README.md` for dataset information.
 
 ## Methodology
 
-The project follows these steps:
-
 1. Load and inspect the dataset.
-2. Perform exploratory data analysis (EDA).
-3. Examine price distributions, city-level differences, and relationships between numerical features.
-4. Prepare the features and target variable for modelling.
-5. Train and evaluate Linear Regression, Random Forest, and XGBoost models.
-6. Compare the models using Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and the coefficient of determination (R²).
-7. Visualise model predictions, residuals, and feature importance.
+2. Explore listing distributions, prices, cities, room types, and numerical correlations.
+3. Split the data into training and test sets.
+4. Fit preprocessing on training data and transform the datasets.
+5. Train and compare Linear Regression, Random Forest, and XGBoost.
+6. Evaluate using Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and R².
+7. Visualise predictions, residuals, model comparisons, and feature importance.
 
-## Model Performance
+The target variable is `log_price`. MAE and RMSE reported on this target scale are not dollar-denominated errors.
 
-The following results are reported on the held-out test set. MAE and RMSE are measured on the `log_price` scale.
+## Model Results
 
 | Model | MAE | RMSE | R² |
 |---|---:|---:|---:|
@@ -41,44 +37,66 @@ The following results are reported on the held-out test set. MAE and RMSE are me
 | Random Forest | 0.2830 | 0.3952 | 0.6960 |
 | XGBoost | 0.2843 | 0.3911 | 0.7022 |
 
-XGBoost achieved the highest R² and lowest RMSE, while Random Forest achieved the lowest MAE. XGBoost was selected as the overall model because it performed best on two of the three evaluation metrics.
+XGBoost achieved the highest R² and lowest RMSE, while Random Forest achieved the lowest MAE. These figures must match the final experiment outputs before submission.
 
-## Exploratory Data Analysis
+## Installation
 
-The project includes visualisations covering:
+Python 3.10 or a compatible version is recommended.
 
-- Number of listings by city.
-- Average listing price by city.
-- Price distributions across cities.
-- Price distributions by room type.
-- Correlations between numerical variables.
+Create and activate a virtual environment on Windows:
 
-## Model Visualisations
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
 
-The model evaluation visualisations include:
+Install dependencies:
 
-- Model performance comparison.
-- Actual versus predicted prices.
-- Prediction error distribution.
-- Residuals versus actual prices.
-- XGBoost feature importance.
+```bash
+python -m pip install -r requirements.txt
+```
 
-Feature importance indicates which features contribute to the model's predictions. It does not establish that those features directly cause prices to change.
+## Running the Experiments
 
-## Project Structure
+Run the full experiment:
+
+```bash
+python run_experiments.py
+```
+
+To select specific models:
+
+```bash
+python run_experiments.py --models linear rf xgb
+```
+
+The results are written to `results/model_comparison.csv` and `results/results.csv`.
+
+## Repository Structure
 
 ```text
 airbnb-price-prediction/
 ├── data/
 │   ├── Airbnb_Data.csv.gz
-│   └── README.md
+│   ├── README.md
+│   └── .gitkeep
 ├── docs/
 │   ├── RESULTS.md
 │   ├── make_writeup.py
 │   └── writeup.pdf
 ├── results/
 │   ├── EDA/
+│   │   ├── average_price_by_city.png
+│   │   ├── listings_by_city.png
+│   │   ├── numeric_correlation_matrix.png
+│   │   ├── price_distribution_across_cities.png
+│   │   └── price_distribution_by_room_type.png
 │   ├── Model/
+│   │   ├── actual_vs_predicted_xgboost.png
+│   │   ├── model_performance_comparison.png
+│   │   ├── residuals_vs_actual_price.png
+│   │   ├── xgboost_feature_importance.png
+│   │   └── xgboost_prediction_error_distribution.png
 │   ├── model_comparison.csv
 │   └── results.csv
 ├── src/
@@ -88,50 +106,17 @@ airbnb-price-prediction/
 │   └── models.py
 ├── config.py
 ├── requirements.txt
-├── run_experiments.py
-└── README.md
+└── run_experiments.py
 ```
-
-## Installation
-
-Python 3.10 or a compatible version is recommended. Use the following commands from the project root.
-
-```bash
-python -m venv .venv
-```
-
-Activate the environment on Windows:
-
-```bash
-.venv\Scripts\activate
-```
-
-Install the dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-## Running the Project
-
-From the project root, run:
-
-```bash
-python run_experiments.py
-```
-
-The script runs the project's experiment pipeline. The exact outputs depend on the implementation and configuration in the repository.
 
 ## Limitations
 
-- The dataset represents a specific set of US cities and may not generalise to other locations.
-- Model performance depends on the available features and data quality.
-- Listing prices can be influenced by factors not captured in the dataset.
-- The evaluation metrics are reported on the log-price scale and should not be interpreted directly as dollar errors.
+- The dataset covers six US cities and may not generalise to other markets.
+- Prediction quality depends on data quality and the features available.
+- Important pricing factors may be absent from the dataset.
 - Feature importance describes predictive contribution, not causation.
+- Predictions are estimates, not guaranteed market prices.
 
 ## Conclusion
 
-This project demonstrates how exploratory data analysis and supervised regression can be used to study Airbnb listing prices. Among the evaluated models, XGBoost achieved the highest R² of 0.7022 and the lowest RMSE of 0.3911, while Random Forest achieved the lowest MAE of 0.2830.
-
-The results show that machine learning can capture useful patterns in listing prices, although predictions remain estimates rather than guaranteed market prices.
+This project demonstrates the use of exploratory data analysis and regression models for Airbnb price prediction. XGBoost performs best on R² and RMSE in the reported comparison, while Random Forest has the lowest MAE. Model results should be interpreted alongside the evaluation metrics and limitations.
