@@ -1,13 +1,18 @@
+
 """Regression models and evaluation metrics."""
+
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
 import config
 
 
 def get_model(name):
-    if name == "ridge":
-        return Ridge(alpha=config.RIDGE_ALPHA)
+    """Return a configured regression model."""
+    if name == "linear":
+        return LinearRegression()
+
     if name == "rf":
         return RandomForestRegressor(
             n_estimators=config.RF_N_ESTIMATORS,
@@ -15,8 +20,10 @@ def get_model(name):
             random_state=config.SEED,
             n_jobs=-1,
         )
+
     if name == "xgb":
         from xgboost import XGBRegressor
+
         return XGBRegressor(
             n_estimators=config.XGB_N_ESTIMATORS,
             max_depth=config.XGB_MAX_DEPTH,
@@ -28,10 +35,12 @@ def get_model(name):
             random_state=config.SEED,
             n_jobs=-1,
         )
+
     raise ValueError(f"Unknown model: {name}")
 
 
 def evaluate(y_true, y_pred):
+    """Calculate regression metrics on the supplied target scale."""
     return {
         "mae_log_price": float(mean_absolute_error(y_true, y_pred)),
         "rmse_log_price": float(mean_squared_error(y_true, y_pred) ** 0.5),
