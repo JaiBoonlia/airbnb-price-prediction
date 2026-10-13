@@ -1,37 +1,40 @@
-# Experimental Results
+# Airbnb Price Prediction — Results
 
-## Evaluation setup
+## 1. Overview
 
-- Dataset: `data/Airbnb_Data.csv.gz`
-- Rows used: 74,111
-- Train/test split: 59,288 / 14,823 rows
-- Split strategy: 80/20, stratified by city
-- Random seed: 42
-- Target: `log_price`
+This document summarises the performance of three regression models trained to predict Airbnb listing prices: Linear Regression, Random Forest, and XGBoost.
 
-## Recorded baseline
+The models were evaluated using a held-out test set with Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and the coefficient of determination (R²).
 
-| Model | MAE (log price) | RMSE (log price) | R² |
+## 2. Model Comparison
+
+| Model | MAE | RMSE | R² |
 |---|---:|---:|---:|
-| Ridge regression | 0.2857 | 0.3967 | 0.6992 |
+| Linear Regression | 0.3056 | 0.4187 | 0.6588 |
+| Random Forest | 0.2830 | 0.3952 | 0.6960 |
+| XGBoost | 0.2843 | 0.3911 | 0.7022 |
 
-The metrics above are the recorded Ridge run on the supplied dataset. They are not copied from an external paper. MAE and RMSE are measured on the log-transformed target scale, so they should not be described as dollar errors.
+**Note:** MAE and RMSE are measured on the log-price target scale. They should not be interpreted directly as errors in dollars.
 
-## Reproduce
+## 3. Interpretation
 
-```bash
-python run_experiments.py --models ridge
-```
+- **Linear Regression:** Achieved an R² of 0.6588, providing a baseline for comparison.
+- **Random Forest:** Achieved the lowest MAE of 0.2830, giving it the smallest average absolute error on the evaluated scale.
+- **XGBoost:** Achieved the highest R² of 0.7022 and lowest RMSE of 0.3911.
 
-This rewrites `results/model_comparison.csv` and `results/results.csv`. Runtime varies by machine. Random Forest and XGBoost are available as optional experiments but do not have results in the checked-in baseline table unless separately run.
+XGBoost was selected as the overall model based on its R² and RMSE results. Random Forest performed slightly better on MAE, so XGBoost was not the best model on every metric.
 
-## Exploratory figures
+## 4. Conclusion
 
-The following figures are generated from the supplied dataset:
+The evaluation indicates that all three models capture useful patterns in Airbnb listing prices. XGBoost provides the strongest overall performance according to R² and RMSE, while Random Forest has the lowest MAE.
 
-- `figures/listings_by_city.png`
-- `figures/log_price_distribution.png`
-- `figures/median_price_by_city.png`
-- `figures/numeric_correlation_matrix.png`
+The models remain imperfect predictors. Their performance is limited by the features available in the dataset and by factors affecting listing prices that may not be represented in the data.
 
-These figures are descriptive; correlation does not imply causation.
+## 5. Limitations
+
+- The dataset covers six US cities and may not generalise to other markets.
+- Predictions depend on the quality and coverage of the available features.
+- The evaluation metrics reported here are on the log-price scale.
+- Predictive feature importance does not establish causal relationships.
+
+These results should be interpreted alongside the project's evaluation graphs and implementation.
